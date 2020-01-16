@@ -3,11 +3,11 @@
 #include <Arduino.h>
 
 #define ACTIVE_LOW true //true in the actual implementation, using inverse for testing.
-#define MAX_FREQUENCY 50
-#define MIN_FREQUENCY 5
+#define MAX_DRIVE_FREQUENCY 50
+#define MIN_DRIVE_FREQUENCY 5
 
-#define MAX_DUTY_CYCLE 50
-#define MIN_DUTY_CYCLE 0
+#define MAX_DRIVE_DUTY_CYCLE 50
+#define MIN_DRIVE_DUTY_CYCLE 0
 
 #define PWM_FREQUENCY 4000
 
@@ -41,6 +41,9 @@ private:
     static uint8_t frequency;
     static uint8_t width;
     static bool active;
-    static uint16_t cnt;
+    static uint16_t cnt; //Counts the interrupts and resets at PWM_FREQUENCY
+    static uint8_t subcnt;
+    static uint8_t cyc; //Counts 100 subdivisions of a drive freq. cycle
+    static uint8_t divisor;
 };
 #endif

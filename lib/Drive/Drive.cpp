@@ -6,13 +6,16 @@ uint8_t Drive::out2;
 uint8_t Drive::width;
 uint8_t Drive::frequency;
 uint16_t Drive::cnt;
+uint8_t Drive::subcnt;
+uint8_t Drive::cyc;
+uint8_t Drive::divisor;
 
 void Drive::init(uint8_t output1, uint8_t output2)
 {
     out1 = output1;
     out2 = output2;
-    frequency = MIN_FREQUENCY;
-    width = MIN_DUTY_CYCLE;
+    frequency = MIN_DRIVE_FREQUENCY;
+    width = MIN_DRIVE_DUTY_CYCLE;
     active = false;
     pinMode(out1, OUTPUT);
     pinMode(out2, OUTPUT);
@@ -22,17 +25,19 @@ void Drive::init(uint8_t output1, uint8_t output2)
 
 void Drive::setFrequency(uint8_t f)
 {
-    if (abs(frequency - f) > 1 && f >= MIN_FREQUENCY && f <= MAX_FREQUENCY)
+    if (abs(frequency - f) > 1 && f >= MIN_DRIVE_FREQUENCY && f <= MAX_DRIVE_FREQUENCY)
     {
-        frequency = f > MAX_FREQUENCY ? MAX_FREQUENCY : f < MIN_FREQUENCY ? MIN_FREQUENCY : f;
+        frequency = f > MAX_DRIVE_FREQUENCY ? MAX_DRIVE_FREQUENCY : f < MIN_DRIVE_FREQUENCY ? MIN_DRIVE_FREQUENCY : f;
+        divisor = round(PWM_FREQUENCY/(frequency*100));
+        subcnt = 0;
         setInterrupt();
     }
 }
 void Drive::setWidth(uint8_t w)
 {
-    if (width != w && w >= MIN_DUTY_CYCLE && w <= MAX_DUTY_CYCLE)
+    if (width != w && w >= MIN_DRIVE_DUTY_CYCLE && w <= MAX_DRIVE_DUTY_CYCLE)
     {
-        width = w > MAX_DUTY_CYCLE ? MAX_DUTY_CYCLE : w < MIN_DUTY_CYCLE ? MIN_DUTY_CYCLE : w;
+        width = w > MAX_DRIVE_DUTY_CYCLE ? MAX_DRIVE_DUTY_CYCLE : w < MIN_DRIVE_DUTY_CYCLE ? MIN_DRIVE_DUTY_CYCLE : w;
         setInterrupt();
     }
 }
@@ -42,6 +47,8 @@ void Drive::energize()
     {
         active = true;
         cnt = 0;
+        cyc = 0;
+        subcnt = 0;
         setInterrupt();
     }
 }
@@ -60,18 +67,19 @@ void Drive::tick()
 {
     if (active)
     {
-        bool o1 = cnt < width*PWM_FREQUENCY/2;
-        bool o2 = (cnt > PWM_FREQUENCY/2) && (cnt < (uint8_t)(width*PWM_FREQUENCY/2 + PWM_FREQUENCY/2));
-
-        // Serial.print("TICK ");
-        // Serial.print(cnt);
-        // Serial.print(" @ ");
-        // Serial.print(millis());
-        // Serial.println("ms:");
+        bool o1 = cyc < width;
+        bool o2 = (cyc > 50) && (cyc < (width + 50));
 
         digitalWrite(out1, !(o1 ^ !ACTIVE_LOW));
         digitalWrite(out2, !(o2 ^ !ACTIVE_LOW));
-        cnt = cnt >= PWM_FREQUENCY-1 ? 0 : cnt + 1;
+        cnt = cnt >= PWM_FREQUENCY - 1 ? 0 : cnt + 1;
+        subcnt++;
+        if(subcnt >= divisor-1)
+        {
+            subcnt = 0;
+            cyc++;
+        }
+        cyc = cyc >= 99 ? 0 : cyc;
     }
 }
 
@@ -103,7 +111,7 @@ void Drive::setInterrupt()
      * |    1       |   1       |   1       | EXT CLK on T1 rise|  
      **/
 
-    uint16_t cmp = ((16.0 * pow(10.0, 6.0)) / (1.0 * ((double)frequency * (double)PWM_FREQUENCY) )) - 1.0;
+    uint16_t cmp = ((16000000.0) / (1.0 * PWM_FREQUENCY)) - 1.0;
     //uint16_t cmp = 2500.0 * (1.0/frequency);
     // Serial.print("f = ");
     // Serial.print(frequency);
@@ -115,7 +123,7 @@ void Drive::setInterrupt()
     // turn on CTC mode
     TCCR1B |= (1 << WGM12);
     // Set prescaler
-    TCCR1B |= (1 << CS10);// | (1 << CS10);
+    TCCR1B |= (1 << CS10); // | (1 << CS10);
     // enable timer compare interrupt
     TIMSK1 |= (1 << OCIE1A);
 
