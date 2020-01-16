@@ -6,9 +6,6 @@ uint8_t Drive::out2;
 uint8_t Drive::width;
 uint8_t Drive::frequency;
 uint16_t Drive::cnt;
-uint8_t Drive::subcnt;
-uint8_t Drive::cyc;
-uint8_t Drive::divisor;
 
 void Drive::init(uint8_t output1, uint8_t output2)
 {
@@ -28,8 +25,6 @@ void Drive::setFrequency(uint8_t f)
     if (abs(frequency - f) > 1 && f >= MIN_DRIVE_FREQUENCY && f <= MAX_DRIVE_FREQUENCY)
     {
         frequency = f > MAX_DRIVE_FREQUENCY ? MAX_DRIVE_FREQUENCY : f < MIN_DRIVE_FREQUENCY ? MIN_DRIVE_FREQUENCY : f;
-        divisor = round(PWM_FREQUENCY/(frequency*100));
-        subcnt = 0;
         setInterrupt();
     }
 }
@@ -38,7 +33,7 @@ void Drive::setWidth(uint8_t w)
     if (width != w && w >= MIN_DRIVE_DUTY_CYCLE && w <= MAX_DRIVE_DUTY_CYCLE)
     {
         width = w > MAX_DRIVE_DUTY_CYCLE ? MAX_DRIVE_DUTY_CYCLE : w < MIN_DRIVE_DUTY_CYCLE ? MIN_DRIVE_DUTY_CYCLE : w;
-        setInterrupt();
+        //setInterrupt();
     }
 }
 void Drive::energize()
@@ -47,8 +42,6 @@ void Drive::energize()
     {
         active = true;
         cnt = 0;
-        cyc = 0;
-        subcnt = 0;
         setInterrupt();
     }
 }
@@ -67,19 +60,12 @@ void Drive::tick()
 {
     if (active)
     {
-        bool o1 = cyc < width;
-        bool o2 = (cyc > 50) && (cyc < (width + 50));
+        bool o1 = cnt < (uint16_t)(width*10);
+        bool o2 = (cnt > (uint16_t)(PWM_FACTOR/2)) && (cnt < (uint16_t)(width*10) + (uint16_t)(PWM_FACTOR/2));
 
         digitalWrite(out1, !(o1 ^ !ACTIVE_LOW));
         digitalWrite(out2, !(o2 ^ !ACTIVE_LOW));
-        cnt = cnt >= PWM_FREQUENCY - 1 ? 0 : cnt + 1;
-        subcnt++;
-        if(subcnt >= divisor-1)
-        {
-            subcnt = 0;
-            cyc++;
-        }
-        cyc = cyc >= 99 ? 0 : cyc;
+        cnt = cnt >= PWM_FACTOR - 1 ? 0 : cnt + 1;        
     }
 }
 
@@ -111,7 +97,7 @@ void Drive::setInterrupt()
      * |    1       |   1       |   1       | EXT CLK on T1 rise|  
      **/
 
-    uint16_t cmp = ((16000000.0) / (1.0 * PWM_FREQUENCY)) - 1.0;
+    uint16_t cmp = ((16000000.0) / (1.0 * (1.0*frequency * 1.0*PWM_FACTOR))) - 1.0;
     //uint16_t cmp = 2500.0 * (1.0/frequency);
     // Serial.print("f = ");
     // Serial.print(frequency);

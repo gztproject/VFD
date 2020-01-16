@@ -9,7 +9,7 @@
 #define MAX_DRIVE_DUTY_CYCLE 50
 #define MIN_DRIVE_DUTY_CYCLE 0
 
-#define PWM_FREQUENCY 4000
+#define PWM_FACTOR 1000
 
 /**
  * Outputs two frequency and width controlled PWM pulses with 180° phase difference.
@@ -42,8 +42,5 @@ private:
     static uint8_t width;
     static bool active;
     static uint16_t cnt; //Counts the interrupts and resets at PWM_FREQUENCY
-    static uint8_t subcnt;
-    static uint8_t cyc; //Counts 100 subdivisions of a drive freq. cycle
-    static uint8_t divisor;
 };
 #endif
