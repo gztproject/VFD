@@ -5,7 +5,7 @@ uint8_t Drive::out1;
 uint8_t Drive::out2;
 uint8_t Drive::width;
 uint8_t Drive::frequency;
-uint8_t Drive::cnt;
+uint16_t Drive::cnt;
 
 void Drive::init(uint8_t output1, uint8_t output2)
 {
@@ -60,8 +60,8 @@ void Drive::tick()
 {
     if (active)
     {
-        bool o1 = cnt < width;
-        bool o2 = (cnt > 50) && (cnt < (width + 50));
+        bool o1 = cnt < width*PWM_FREQUENCY/2;
+        bool o2 = (cnt > PWM_FREQUENCY/2) && (cnt < (uint8_t)(width*PWM_FREQUENCY/2 + PWM_FREQUENCY/2));
 
         // Serial.print("TICK ");
         // Serial.print(cnt);
@@ -71,7 +71,7 @@ void Drive::tick()
 
         digitalWrite(out1, !(o1 ^ !ACTIVE_LOW));
         digitalWrite(out2, !(o2 ^ !ACTIVE_LOW));
-        cnt = cnt >= 99 ? 0 : cnt + 1;
+        cnt = cnt >= PWM_FREQUENCY-1 ? 0 : cnt + 1;
     }
 }
 
@@ -103,7 +103,7 @@ void Drive::setInterrupt()
      * |    1       |   1       |   1       | EXT CLK on T1 rise|  
      **/
 
-    uint16_t cmp = ((16.0 * pow(10.0, 6.0)) / (8.0 * (100.0 * frequency * 1.0))) - 1.0;
+    uint16_t cmp = ((16.0 * pow(10.0, 6.0)) / (1.0 * ((double)frequency * (double)PWM_FREQUENCY) )) - 1.0;
     //uint16_t cmp = 2500.0 * (1.0/frequency);
     // Serial.print("f = ");
     // Serial.print(frequency);
@@ -115,7 +115,7 @@ void Drive::setInterrupt()
     // turn on CTC mode
     TCCR1B |= (1 << WGM12);
     // Set prescaler
-    TCCR1B |= (1 << CS11);// | (1 << CS10);
+    TCCR1B |= (1 << CS10);// | (1 << CS10);
     // enable timer compare interrupt
     TIMSK1 |= (1 << OCIE1A);
 

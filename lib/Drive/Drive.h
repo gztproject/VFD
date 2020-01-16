@@ -9,6 +9,8 @@
 #define MAX_DUTY_CYCLE 50
 #define MIN_DUTY_CYCLE 0
 
+#define PWM_FREQUENCY 4000
+
 /**
  * Outputs two frequency and width controlled PWM pulses with 180° phase difference.
  * 
@@ -39,6 +41,6 @@ private:
     static uint8_t frequency;
     static uint8_t width;
     static bool active;
-    static uint8_t cnt;
+    static uint16_t cnt;
 };
 #endif
