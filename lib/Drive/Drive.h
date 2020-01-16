@@ -6,7 +6,7 @@
 #define MAX_FREQUENCY 50
 #define MIN_FREQUENCY 5
 
-#define MAX_DUTY_CYCLE 50
+#define MAX_DUTY_CYCLE 40
 #define MIN_DUTY_CYCLE 0
 
 /**
