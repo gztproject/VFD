@@ -52,7 +52,7 @@ void loop()
     Display::printNumber(pot);
     if (pot > 0)
     {
-      Drive::setWidth(pot2/2);
+      Drive::setWidth(pot2);
       Drive::setFrequency(pot/2);
       Drive::energize();
     }

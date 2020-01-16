@@ -6,7 +6,7 @@
 #define MAX_DRIVE_FREQUENCY 50
 #define MIN_DRIVE_FREQUENCY 5
 
-#define MAX_DRIVE_DUTY_CYCLE 50
+#define MAX_DRIVE_DUTY_CYCLE 100
 #define MIN_DRIVE_DUTY_CYCLE 0
 
 #define PWM_FACTOR 1000
@@ -39,8 +39,9 @@ private:
     static uint8_t out1;
     static uint8_t out2;
     static uint8_t frequency;
-    static uint8_t width;
+    static uint16_t width;
     static bool active;
     static uint16_t cnt; //Counts the interrupts and resets at PWM_FREQUENCY
+    static uint16_t pwmCnt;
 };
 #endif

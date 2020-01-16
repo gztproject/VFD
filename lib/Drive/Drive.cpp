@@ -3,9 +3,10 @@
 bool Drive::active;
 uint8_t Drive::out1;
 uint8_t Drive::out2;
-uint8_t Drive::width;
+uint16_t Drive::width;
 uint8_t Drive::frequency;
 uint16_t Drive::cnt;
+uint16_t Drive::pwmCnt;
 
 void Drive::init(uint8_t output1, uint8_t output2)
 {
@@ -13,6 +14,8 @@ void Drive::init(uint8_t output1, uint8_t output2)
     out2 = output2;
     frequency = MIN_DRIVE_FREQUENCY;
     width = MIN_DRIVE_DUTY_CYCLE;
+    cnt = 0;
+    pwmCnt = 0;
     active = false;
     pinMode(out1, OUTPUT);
     pinMode(out2, OUTPUT);
@@ -32,8 +35,8 @@ void Drive::setWidth(uint8_t w)
 {
     if (width != w && w >= MIN_DRIVE_DUTY_CYCLE && w <= MAX_DRIVE_DUTY_CYCLE)
     {
-        width = w > MAX_DRIVE_DUTY_CYCLE ? MAX_DRIVE_DUTY_CYCLE : w < MIN_DRIVE_DUTY_CYCLE ? MIN_DRIVE_DUTY_CYCLE : w;
-        //setInterrupt();
+        width = w > MAX_DRIVE_DUTY_CYCLE ? MAX_DRIVE_DUTY_CYCLE * 10 / 2 : w < MIN_DRIVE_DUTY_CYCLE ? MIN_DRIVE_DUTY_CYCLE : w * 10 / 2;
+        pwmCnt = 0;
     }
 }
 void Drive::energize()
@@ -42,6 +45,7 @@ void Drive::energize()
     {
         active = true;
         cnt = 0;
+        pwmCnt = 0;
         setInterrupt();
     }
 }
@@ -60,12 +64,35 @@ void Drive::tick()
 {
     if (active)
     {
-        bool o1 = cnt < (uint16_t)(width*10);
-        bool o2 = (cnt > (uint16_t)(PWM_FACTOR/2)) && (cnt < (uint16_t)(width*10) + (uint16_t)(PWM_FACTOR/2));
+        bool pwm = false;
+        //Lower half of active periods
+        if (cnt <= width / 2 || (cnt > (uint16_t)(PWM_FACTOR / 2) && cnt <= width / 2 + (uint16_t)(PWM_FACTOR / 2)))
+        {
+            if (pwmCnt++ == 0)
+                pwm = true;
+            if (pwmCnt > 0)
+            {
+                pwm = false;
+                pwmCnt = 0;
+            }
+        }
+        //Upper half of active periods
+        if ((cnt < (uint16_t)(PWM_FACTOR / 2) && cnt > width / 2) || cnt > width / 2 + (uint16_t)(PWM_FACTOR / 2))
+        {
+            if (pwmCnt++ == 0)
+                pwm = true;
+            else
+            {
+                pwm = false;
+                pwmCnt = 0;
+            }
+        }
+        bool o1 = (cnt < width) && pwm;
+        bool o2 = cnt > (uint16_t)(PWM_FACTOR / 2) && cnt < width + (uint16_t)(PWM_FACTOR / 2) && pwm;
 
         digitalWrite(out1, !(o1 ^ !ACTIVE_LOW));
         digitalWrite(out2, !(o2 ^ !ACTIVE_LOW));
-        cnt = cnt >= PWM_FACTOR - 1 ? 0 : cnt + 1;        
+        cnt = cnt >= PWM_FACTOR - 1 ? 0 : cnt + 1;
     }
 }
 
@@ -97,7 +124,7 @@ void Drive::setInterrupt()
      * |    1       |   1       |   1       | EXT CLK on T1 rise|  
      **/
 
-    uint16_t cmp = ((16000000.0) / (1.0 * (1.0*frequency * 1.0*PWM_FACTOR))) - 1.0;
+    uint16_t cmp = ((16000000.0) / (1.0 * (1.0 * frequency * 1.0 * PWM_FACTOR))) - 1.0;
     //uint16_t cmp = 2500.0 * (1.0/frequency);
     // Serial.print("f = ");
     // Serial.print(frequency);
