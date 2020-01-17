@@ -49,13 +49,13 @@ void loop()
   case manual:
   {
     int pot = round(100.0 * (analogRead(POT) * 1.0 / 1024.0));
-    int pot2 = round(100.0 * (analogRead(A6) * 1.0 / 1024.0));
+    int pot2 = round(MAX_DRIVE_DUTY_CYCLE * (analogRead(A6) * 1.0 / 1024.0));
 
     Display::printNumber(pot);
     if (pot > 0)
     {
       Drive::setWidth(pot2);
-      Drive::setFrequency(pot / 2);
+      Drive::setFrequency(MAX_DRIVE_FREQUENCY * (pot * 1.0 / 100.0));
       Drive::energize();
     }
     else
