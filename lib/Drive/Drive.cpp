@@ -3,45 +3,59 @@
 bool Drive::active;
 uint8_t Drive::out1;
 uint8_t Drive::out2;
-uint8_t Drive::width;
+uint16_t Drive::width;
 uint8_t Drive::frequency;
-uint8_t Drive::cnt;
+uint16_t Drive::cnt;
+uint16_t Drive::pwmCnt;
+uint8_t Drive::pwmLookup[PWM_FACTOR];
 
 void Drive::init(uint8_t output1, uint8_t output2)
 {
     out1 = output1;
     out2 = output2;
-    frequency = MIN_FREQUENCY;
-    width = MIN_DUTY_CYCLE;
-    active = false;
     pinMode(out1, OUTPUT);
     pinMode(out2, OUTPUT);
     digitalWrite(out1, ACTIVE_LOW);
     digitalWrite(out2, ACTIVE_LOW);
+    frequency = MIN_DRIVE_FREQUENCY;
+    width = DEFAULT_DRIVE_DUTY_CYCLE;
+    populatePwmLookup();
+    cnt = 0;
+    pwmCnt = 0;
+    active = false;
 }
 
-void Drive::setFrequency(uint8_t f)
+int8_t Drive::setFrequency(uint8_t f)
 {
-    if (abs(frequency - f) > 1 && f >= MIN_FREQUENCY && f <= MAX_FREQUENCY)
+    if (abs(frequency - f) > 1 && f >= MIN_DRIVE_FREQUENCY && f <= MAX_DRIVE_FREQUENCY)
     {
-        frequency = f > MAX_FREQUENCY ? MAX_FREQUENCY : f < MIN_FREQUENCY ? MIN_FREQUENCY : f;
+        frequency = f > MAX_DRIVE_FREQUENCY ? MAX_DRIVE_FREQUENCY : f < MIN_DRIVE_FREQUENCY ? MIN_DRIVE_FREQUENCY : f;
         setInterrupt();
+        return frequency;
+    }
+    return frequency;
+}
+
+int8_t Drive::setWidth(uint8_t w)
+{
+    if (active)
+        return -1;
+    if (width != w && w >= MIN_DRIVE_DUTY_CYCLE && w <= MAX_DRIVE_DUTY_CYCLE)
+    {
+        width = w > MAX_DRIVE_DUTY_CYCLE ? MAX_DRIVE_DUTY_CYCLE : w < MIN_DRIVE_DUTY_CYCLE ? MIN_DRIVE_DUTY_CYCLE : w;
+        pwmCnt = 0;
+        populatePwmLookup();
+        return width;
     }
 }
-void Drive::setWidth(uint8_t w)
-{
-    if (width != w && w >= MIN_DUTY_CYCLE && w <= MAX_DUTY_CYCLE)
-    {
-        width = w > MAX_DUTY_CYCLE ? MAX_DUTY_CYCLE : w < MIN_DUTY_CYCLE ? MIN_DUTY_CYCLE : w;
-        setInterrupt();
-    }
-}
+
 void Drive::energize()
 {
     if (!active)
     {
         active = true;
         cnt = 0;
+        pwmCnt = 0;
         setInterrupt();
     }
 }
@@ -60,18 +74,38 @@ void Drive::tick()
 {
     if (active)
     {
-        bool o1 = cnt < width;
-        bool o2 = (cnt > 50) && (cnt < (width + 50));
+        bool pwm = pwmCnt < pwmLookup[cnt];
 
-        // Serial.print("TICK ");
-        // Serial.print(cnt);
-        // Serial.print(" @ ");
-        // Serial.print(millis());
-        // Serial.println("ms:");
+        bool o1 = (cnt < width*10) && pwm;
+        bool o2 = cnt > (uint16_t)(PWM_FACTOR / 2) && cnt < (width*10) + (uint16_t)(PWM_FACTOR / 2) && pwm;
 
         digitalWrite(out1, !(o1 ^ !ACTIVE_LOW));
         digitalWrite(out2, !(o2 ^ !ACTIVE_LOW));
-        cnt = cnt >= 99 ? 0 : cnt + 1;
+        cnt = cnt >= PWM_FACTOR - 1 ? 0 : cnt + 1;
+        pwmCnt = pwmCnt >= PWM_WINDOW - 1 ? 0 : pwmCnt + 1;
+    }
+}
+
+void Drive::populatePwmLookup()
+{
+    for (uint16_t i = 0; i < PWM_FACTOR; i++)
+    {
+        uint16_t quarter = i;
+        if (quarter > PWM_FACTOR / 2)
+            quarter = quarter - PWM_FACTOR / 2;
+        if (quarter > width * 10 / 2)
+            quarter = width * 10 >= quarter ? width * 10 - quarter : 0;
+
+        pwmLookup[i] = quarter <= width * 10 ? PWM_WINDOW * sin((PI / 2) * quarter / (width * 10 / 2)) : 0;
+
+#ifdef SERIAL_DEBUG
+        Serial.print("cnt: ");
+        Serial.print(i);
+        Serial.print("; 1/4: ");
+        Serial.print(quarter);
+        Serial.print("; value: ");
+        Serial.println(pwmLookup[i]);
+#endif
     }
 }
 
@@ -103,7 +137,7 @@ void Drive::setInterrupt()
      * |    1       |   1       |   1       | EXT CLK on T1 rise|  
      **/
 
-    uint16_t cmp = ((16.0 * pow(10.0, 6.0)) / (8.0 * (100.0 * frequency * 1.0))) - 1.0;
+    uint16_t cmp = ((16000000.0) / (1.0 * (1.0 * frequency * 1.0 * PWM_FACTOR))) - 1.0;
     //uint16_t cmp = 2500.0 * (1.0/frequency);
     // Serial.print("f = ");
     // Serial.print(frequency);
@@ -115,7 +149,7 @@ void Drive::setInterrupt()
     // turn on CTC mode
     TCCR1B |= (1 << WGM12);
     // Set prescaler
-    TCCR1B |= (1 << CS11);// | (1 << CS10);
+    TCCR1B |= (1 << CS10); // | (1 << CS10);
     // enable timer compare interrupt
     TIMSK1 |= (1 << OCIE1A);
 
