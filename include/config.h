@@ -1,6 +1,6 @@
 #ifndef CONFIG_H
     #define CONFIG_H
-
+    
     //Output pins:
 
     #define TRIG_POS 1 //positive IGBT trigger output
