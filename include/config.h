@@ -12,10 +12,10 @@
 
 //UI input pins:
 
-#define BTN1 A3 //Button 1
-#define BTN2 A2 //Button 2
-#define BTN3 A1 //Button 3
-#define POT A0  //Fader
+#define BTN1PIN A3 //Button 1
+#define BTN2PIN A2 //Button 2
+#define BTN3PIN A1 //Button 3
+#define POTPIN A0  //Fader
 
 //Display pins:
 
@@ -35,5 +35,11 @@
 //EEPROM:
 
 #define EEPROM_ADDRESS 0
+
+//Misc
+
+#define MENU_SHOW_TIME 1000
+#define MENU_TIMEOUT 20000
+
 
 #endif

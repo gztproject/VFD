@@ -23,6 +23,7 @@ void DMX::read()
 
 bool DMX::hasDMX()
 {    
+    return analogRead(A6)<=512;
     return DMXSerial.noDataSince() < DMX_TIMEOUT;
 }
 

@@ -29,7 +29,7 @@ int8_t Drive::setFrequency(uint8_t f)
 {
     if (abs(frequency - f) > 1 && f >= MIN_DRIVE_FREQUENCY && f <= MAX_DRIVE_FREQUENCY)
     {
-        frequency = f > MAX_DRIVE_FREQUENCY ? MAX_DRIVE_FREQUENCY : f < MIN_DRIVE_FREQUENCY ? MIN_DRIVE_FREQUENCY : f;
+        frequency = constrain(f, MIN_DRIVE_FREQUENCY, MAX_DRIVE_FREQUENCY);
         setInterrupt();
         return frequency;
     }
@@ -42,7 +42,7 @@ int8_t Drive::setWidth(uint8_t w)
         return -1;
     if (width != w && w >= MIN_DRIVE_DUTY_CYCLE && w <= MAX_DRIVE_DUTY_CYCLE)
     {
-        width = w > MAX_DRIVE_DUTY_CYCLE ? MAX_DRIVE_DUTY_CYCLE : w < MIN_DRIVE_DUTY_CYCLE ? MIN_DRIVE_DUTY_CYCLE : w;
+        width = constrain(w, MIN_DRIVE_DUTY_CYCLE, MAX_DRIVE_DUTY_CYCLE);
         pwmCnt = 0;
         populatePwmLookup();
         return width;
@@ -84,6 +84,16 @@ void Drive::tick()
         cnt = cnt >= PWM_FACTOR - 1 ? 0 : cnt + 1;
         pwmCnt = pwmCnt >= PWM_WINDOW - 1 ? 0 : pwmCnt + 1;
     }
+}
+
+bool Drive::isActive()
+{
+    return active;
+}
+
+uint8_t Drive::getWidth()
+{
+    return width;
 }
 
 void Drive::populatePwmLookup()

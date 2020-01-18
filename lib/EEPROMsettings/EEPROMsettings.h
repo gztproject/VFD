@@ -23,7 +23,7 @@ class EEPROMsettings
 public:
     //Check and init EEPROM if needed;
     static void initEEPROM(uint8_t addr, settingsContainer def);
-    static void saveDMXAddress(uint16_t address);
+    static void saveDMXAddress(uint16_t newAddress);
     static void saveDriveDutyCycle(uint8_t dutyCycle);
     static settingsContainer getSettings();
 private:

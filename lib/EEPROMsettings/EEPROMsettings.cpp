@@ -25,8 +25,6 @@ void EEPROMsettings::initEEPROM(uint8_t addr, settingsContainer def)
     Serial.println(getChecksum(settings));
 #endif
 
-    
-
     if (getChecksum(settings) == packet.checksum)
         return;
 
@@ -54,12 +52,14 @@ settingsContainer EEPROMsettings::getSettings()
     return settings;
 }
 
-void EEPROMsettings::saveDMXAddress(uint16_t address)
+void EEPROMsettings::saveDMXAddress(uint16_t newAddress)
 {
     if (!initialized)
         return;
+    if (settings.dmxAddress == newAddress)
+        return;
 
-    settings.dmxAddress = address;
+    settings.dmxAddress = newAddress;
     EEPROMpacket packet =
         {
             settings,             //settingsContainer
@@ -72,6 +72,9 @@ void EEPROMsettings::saveDriveDutyCycle(uint8_t dutyCycle)
 {
     if (!initialized)
         return;
+    if (dutyCycle == settings.driveDutyCycle)
+        return;
+
     settings.driveDutyCycle = dutyCycle;
     EEPROMpacket packet =
         {

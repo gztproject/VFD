@@ -42,6 +42,8 @@ public:
     static void energize();
     static void turnOff();
     static void tick();
+    static bool isActive();
+    static uint8_t getWidth();
 
 private:
     static void setInterrupt();
