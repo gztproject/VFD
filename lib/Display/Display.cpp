@@ -1,5 +1,6 @@
 #include "Display.h"
 SevSeg sevseg;
+bool Display::blinkSw = false;
 
 void Display::init(byte a, byte b, byte c, byte d, byte e, byte f, byte g, byte dp, byte ca1, byte ca2, byte ca3)
 {    
@@ -20,6 +21,11 @@ void Display::init(byte a, byte b, byte c, byte d, byte e, byte f, byte g, byte 
 void Display::printNumber(int n)
 {
     sevseg.setNumber(n, 1);    
+}
+
+void Display::printDMX(int n)
+{
+    sevseg.setNumber(n, 0);  
 }
 
 void Display::printString(const char *str)

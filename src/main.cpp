@@ -1,23 +1,30 @@
 #include <Arduino.h>
 #include <config.h>
+#include <EEPROMsettings.h>
 #include <Display.h>
 #include <Drive.h>
+#include <DMX.h>
+
+//#define SERIAL_DEBUG
 
 enum States
 {
   boot = 0,
-  manual = 10,
-  setDmx = 20,
-  dmx = 30
+  logo = 10,
+  manual = 20,
+  setDmx = 30,
+  setDutyCycle = 40,
+  dmx = 50
 };
-int state = 0;
-int lastMillis = 0;
+uint8_t state = 0;
+uint16_t lastMillis = 0;
 
 void setup()
 {
 
 // As we are using pin 1 (TX) for output and 2 (RX) for DMX input we cannot use Serial, it is only here for testing purpouses.
 #ifdef SERIAL_DEBUG
+#warning Serial debugging has been enabled! This disables IGBT outputs and  DMX input.
   Serial.begin(115200);
   while (!Serial)
   {
@@ -36,10 +43,24 @@ void loop()
   {
   case boot:
   {
+    settingsContainer defaults = {
+        1,                       //Default DMX address
+        DEFAULT_DRIVE_DUTY_CYCLE //Default duty cycle from Drive.h
+    };
+    EEPROMsettings::initEEPROM(EEPROM_ADDRESS, defaults);
+
+    DMX::init(EEPROMsettings::getSettings().dmxAddress);
+    Drive::setWidth(EEPROMsettings::getSettings().driveDutyCycle);
+    state = logo;
+    lastMillis = millis();
+    break;
+  }
+
+  case logo:
+  {
     if (millis() - lastMillis > 5000)
     {
       state = manual;
-      lastMillis = millis();
       break;
     }
     Display::printString("GZT");
@@ -48,13 +69,16 @@ void loop()
 
   case manual:
   {
+    if (DMX::hasDMX())
+    {
+      state = dmx;
+      break;
+    }
     int pot = round(100.0 * (analogRead(POT) * 1.0 / 1024.0));
-    int pot2 = round(MAX_DRIVE_DUTY_CYCLE * (analogRead(A6) * 1.0 / 1024.0));
 
     Display::printNumber(pot);
     if (pot > 0)
     {
-      Drive::setWidth(pot2);
       Drive::setFrequency(MAX_DRIVE_FREQUENCY * (pot * 1.0 / 100.0));
       Drive::energize();
     }
@@ -68,11 +92,33 @@ void loop()
 
   case setDmx:
   {
+    uint16_t newAddress = 503; //ToDo: UI input
+    EEPROMsettings::saveDMXAddress(newAddress);
+    DMX::init(EEPROMsettings::getSettings().dmxAddress);
+    break;
+  }
+
+  case setDutyCycle:
+  {
+    uint8_t newDriveDutyCycle = DEFAULT_DRIVE_DUTY_CYCLE; //ToDo: UI input
+    EEPROMsettings::saveDriveDutyCycle(newDriveDutyCycle);
+    Drive::turnOff();
+    Drive::setWidth(EEPROMsettings::getSettings().driveDutyCycle);
+    Drive::energize();
     break;
   }
 
   case dmx:
   {
+    if (!DMX::hasDMX())
+    {
+      state = manual;
+      break;
+    }
+      Display::printDMX(DMX::getAddress());
+
+    DMX::read();
+    Drive::setFrequency(MAX_DRIVE_FREQUENCY * (DMX::values[0] * 1.0 / 255.0));
     break;
   }
 

@@ -7,7 +7,7 @@ uint16_t Drive::width;
 uint8_t Drive::frequency;
 uint16_t Drive::cnt;
 uint16_t Drive::pwmCnt;
-uint8_t Drive::pwmLookup[PWM_FACTOR];
+volatile uint8_t Drive::pwmLookup[PWM_FACTOR];
 
 void Drive::init(uint8_t output1, uint8_t output2)
 {
@@ -76,8 +76,8 @@ void Drive::tick()
     {
         bool pwm = pwmCnt < pwmLookup[cnt];
 
-        bool o1 = (cnt < width*10) && pwm;
-        bool o2 = cnt > (uint16_t)(PWM_FACTOR / 2) && cnt < (width*10) + (uint16_t)(PWM_FACTOR / 2) && pwm;
+        bool o1 = (cnt < width * 10) && pwm;
+        bool o2 = cnt > (uint16_t)(PWM_FACTOR / 2) && cnt < (width * 10) + (uint16_t)(PWM_FACTOR / 2) && pwm;
 
         digitalWrite(out1, !(o1 ^ !ACTIVE_LOW));
         digitalWrite(out2, !(o2 ^ !ACTIVE_LOW));
