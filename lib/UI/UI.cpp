@@ -10,7 +10,7 @@ void UI::init(uint8_t a, uint8_t b, uint8_t c, uint8_t d, uint8_t e, uint8_t f, 
     uint8_t numDigits = 3;
     uint8_t digitPins[] = {ca1, ca2, ca3};
     uint8_t segmentPins[] = {a, b, c, d, e, f, g, dp};
-    bool resistorsOnSegments = false;      // 'false' means resistors are on digit pins
+    bool resistorsOnSegments = true;      // 'false' means resistors are on digit pins
     uint8_t hardwareConfig = COMMON_ANODE; // See README.md for options
     bool updateWithDelays = false;         // Default 'false' is Recommended
     bool leadingZeros = false;             // Use 'true' if you'd like to keep the leading zeros

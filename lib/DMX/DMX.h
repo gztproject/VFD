@@ -4,7 +4,7 @@
 #include <DMXSerial.h>
 
 #define NUM_CHANS 1
-#define DMX_TIMEOUT 5000
+#define DMX_TIMEOUT 3000
 
 class DMX
 {

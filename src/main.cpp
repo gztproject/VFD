@@ -82,7 +82,7 @@ void loop()
 
     if (millis() - lastMillis < MENU_SHOW_TIME)
     {
-      UI::printString("NAn");
+      UI::printString("FAd");
       break;
     }
 
@@ -102,7 +102,7 @@ void loop()
   {
     if (millis() - lastMillis < MENU_SHOW_TIME && newAddress == -1)
     {
-      UI::printString("DnX");
+      UI::printString("Add");
       break;
     }
 
@@ -183,7 +183,7 @@ void loop()
       restart ? Drive::turnOff() : (void)0;
       Drive::setWidth(EEPROMsettings::getSettings().driveDutyCycle);
       restart ? Drive::energize() : (void)0;
-      state = DMX::hasDMX() ? dmx : manual;
+      state = manual;
       lastMillis = millis();
       break;
     }
@@ -202,7 +202,7 @@ void loop()
 
     if (millis() - lastMillis < MENU_SHOW_TIME)
     {
-      UI::printString("RnT");
+      UI::printString("DNX");
       break;
     }
 
