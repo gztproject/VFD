@@ -18,11 +18,11 @@ enum States
   error = 99,
 };
 uint8_t state = 0;
-uint16_t lastMillis = 0;
+uint32_t lastMillis = 0;
 int16_t newAddress = -1;
 int8_t newDriveDutyCycle = -1;
 uint8_t pot = 0;
-
+uint8_t lastDmxValue = 0;
 void setup()
 {
 
@@ -35,7 +35,7 @@ void setup()
   }
 #endif
 
-  UI::init(DISP_A, DISP_B, DISP_C, DISP_D, DISP_E, DISP_F, DISP_G, DISP_DP, DISP_CA1, DISP_CA2, DISP_CA3, BTN1PIN, BTN2PIN, BTN3PIN);
+  UI::init();
   lastMillis = millis();
   Drive::init(TRIG_POS, TRIG_NEG);
 }
@@ -62,7 +62,7 @@ void loop()
 
   case logo:
   {
-    if (millis() - lastMillis > 5000)
+    if (millis() - lastMillis > 3000)
     {
       state = manual;
       break;
@@ -73,7 +73,7 @@ void loop()
 
   case manual:
   {
-    if (DMX::hasDMX())
+    if (DMX::hasDMX() && millis() - lastMillis > DMX_TIMEOUT)
     {
       state = dmx;
       Drive::turnOff();
@@ -171,7 +171,7 @@ void loop()
 
     if (millis() - lastMillis > MENU_TIMEOUT)
     {
-      state = DMX::hasDMX() ? dmx : manual;
+      state = manual;
       lastMillis = millis();
       break;
     }   
@@ -214,7 +214,7 @@ void loop()
       break;
     }
 
-    UI::printDMX(DMX::getAddress());
+    UI::printDMX(lastDmxValue);
 
     break;
   }
@@ -232,7 +232,7 @@ void loop()
 
   if (!(DMX::hasDMX() || state == error))
   {
-    pot = round(100.0 * (analogRead(POTPIN) * 1.0 / 1024.0));
+    pot = UI::readPot();
 
     if (pot > 0)
     {
@@ -248,7 +248,8 @@ void loop()
   if (DMX::hasDMX() && state != error)
   {
     DMX::read();
-    uint8_t freq = MAX_DRIVE_FREQUENCY * (DMX::values[0] * 1.0 / 255.0);
+    lastDmxValue = DMX::values[0];
+    uint8_t freq = MAX_DRIVE_FREQUENCY * (lastDmxValue * 1.0 / 255.0);
     if (freq > 0)
     {
       Drive::setFrequency(freq);

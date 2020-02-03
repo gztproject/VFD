@@ -6,7 +6,7 @@
 
 #define ACTIVE_LOW true //true in the actual implementation, used inverse for some testing.
 
-#define MAX_DRIVE_FREQUENCY 50
+#define MAX_DRIVE_FREQUENCY 45
 #define MIN_DRIVE_FREQUENCY 5
 
 /**

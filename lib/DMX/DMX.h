@@ -1,10 +1,12 @@
 #ifndef DMX_H
 #define DMX_H
 #include <Arduino.h>
+#include "config.h"
 #include <DMXSerial.h>
 
 #define NUM_CHANS 1
 #define DMX_TIMEOUT 3000
+#define BREAKSPEED 220000
 
 class DMX
 {
@@ -17,6 +19,8 @@ public:
 
 private:
     static uint16_t address;
+    static uint8_t readings[];
+    static uint8_t readIndex; // the index of the current reading
     DMX(){};
 };
 #endif

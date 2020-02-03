@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CONFIG_H
 #define CONFIG_H
 
@@ -9,6 +10,7 @@
 //DMX pins:
 
 #define DMX_IN 0 //DMX signal input pin
+#define DMX_SMOOTHING 20 //Number of values for the running average; 0 to disable
 
 //UI input pins:
 
@@ -16,6 +18,9 @@
 #define BTN2PIN A1 //Button 2
 #define BTN3PIN A2 //Button 3
 #define POTPIN A3  //Fader
+
+#define MAX_FADER_READING 84
+#define FADER_SMOOTHING 10 //Number of values for the running average; 0 to disable
 
 //Display pins:
 
