@@ -542,7 +542,7 @@ L Device1:R R2
 U 1 1 5E1A3660
 P 6600 5600
 F 0 "R2" V 6680 5600 50  0000 C CNN
-F 1 "4K7" V 6600 5600 50  0000 C CNN
+F 1 "1K" V 6600 5600 50  0000 C CNN
 F 2 "Resistors_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 6530 5600 50  0001 C CNN
 F 3 "" H 6600 5600 50  0001 C CNN
 	1    6600 5600
@@ -636,17 +636,6 @@ F 2 "Capacitors_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm" H 6388 5150 50  0001 C CNN
 F 3 "" H 6350 5300 50  0001 C CNN
 	1    6350 5300
 	1    0    0    -1  
-$EndComp
-$Comp
-L Device1:R R1
-U 1 1 5E1A369A
-P 6550 5300
-F 0 "R1" H 6500 5150 50  0000 C CNN
-F 1 "4K7" V 6550 5300 50  0000 C CNN
-F 2 "Resistors_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 6480 5300 50  0001 C CNN
-F 3 "" H 6550 5300 50  0001 C CNN
-	1    6550 5300
-	-1   0    0    1   
 $EndComp
 $Comp
 L Converter_DCDC1:RFM0505S PS1
@@ -1012,10 +1001,6 @@ Wire Wire Line
 	6200 5600 6450 5600
 Connection ~ 5900 5850
 Wire Wire Line
-	6200 5300 6250 5300
-Wire Wire Line
-	6250 5300 6250 5050
-Wire Wire Line
 	5900 5000 5900 5050
 Connection ~ 5900 5050
 Wire Wire Line
@@ -1031,25 +1016,10 @@ Wire Wire Line
 Connection ~ 7750 5500
 Wire Wire Line
 	6800 5600 6750 5600
-Connection ~ 6250 5050
 Wire Wire Line
 	6350 5850 6350 5450
 Wire Wire Line
 	6350 5050 6350 5150
-Wire Wire Line
-	6200 5400 6250 5400
-Wire Wire Line
-	6250 5400 6250 5500
-Connection ~ 6250 5500
-Connection ~ 6350 5050
-Wire Wire Line
-	5900 5050 6250 5050
-Wire Wire Line
-	6550 5050 6550 5150
-Wire Wire Line
-	6200 5500 6250 5500
-Wire Wire Line
-	6550 5500 6550 5450
 Wire Wire Line
 	7600 5500 7750 5500
 Wire Wire Line
@@ -1108,14 +1078,6 @@ Wire Wire Line
 	2950 5100 5300 5100
 Wire Wire Line
 	2900 5050 5350 5050
-Wire Wire Line
-	5350 5050 5350 5600
-Wire Wire Line
-	5350 5600 5600 5600
-Wire Wire Line
-	5300 5100 5300 5400
-Wire Wire Line
-	5300 5400 5600 5400
 Wire Wire Line
 	4250 6950 4550 6950
 Wire Wire Line
@@ -1292,17 +1254,11 @@ Wire Wire Line
 Wire Wire Line
 	7750 5500 10500 5500
 Wire Wire Line
-	6250 5050 6350 5050
-Wire Wire Line
-	6250 5500 6550 5500
-Wire Wire Line
-	6350 5050 6550 5050
-Wire Wire Line
 	7650 4250 7850 4250
 Wire Wire Line
 	7650 4550 8000 4550
 Wire Wire Line
-	5900 5850 6350 5850
+	5900 5850 6250 5850
 Connection ~ 650  2300
 $Comp
 L Device:Thermistor_NTC TH1
@@ -1608,6 +1564,33 @@ Text Label 3500 5050 0    50   ~ 0
 DMX+
 Text Label 3750 5100 0    50   ~ 0
 DMX-
+Wire Wire Line
+	5900 5050 6350 5050
+Wire Wire Line
+	6200 5300 6250 5300
+Wire Wire Line
+	6250 5300 6250 5400
+Wire Wire Line
+	6250 5500 6200 5500
+Wire Wire Line
+	6250 5500 6250 5850
+Connection ~ 6250 5500
+Connection ~ 6250 5850
+Wire Wire Line
+	6250 5850 6350 5850
+Wire Wire Line
+	6200 5400 6250 5400
+Connection ~ 6250 5400
+Wire Wire Line
+	6250 5400 6250 5500
+Wire Wire Line
+	5300 5600 5600 5600
+Wire Wire Line
+	5300 5100 5300 5600
+Wire Wire Line
+	5600 5400 5350 5400
+Wire Wire Line
+	5350 5400 5350 5050
 Wire Bus Line
 	8850 3300 8850 6300
 Wire Bus Line
