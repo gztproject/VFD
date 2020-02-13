@@ -871,7 +871,7 @@ Connection ~ 1700 2400
 Wire Wire Line
 	950  2500 1150 2500
 Wire Wire Line
-	2900 2400 3000 2400
+	2900 2400 2950 2400
 Connection ~ 3000 2400
 Wire Wire Line
 	9650 3250 9650 3300
@@ -1645,18 +1645,9 @@ Wire Wire Line
 Connection ~ 2300 1450
 Wire Wire Line
 	2300 1950 2300 1850
-Wire Wire Line
-	2300 2250 2300 2300
 Connection ~ 2300 2400
 Wire Wire Line
 	2300 2400 2350 2400
-Wire Wire Line
-	2450 2050 2450 2300
-Wire Wire Line
-	2450 2300 2300 2300
-Connection ~ 2300 2300
-Wire Wire Line
-	2300 2300 2300 2400
 Wire Wire Line
 	2300 1450 2800 1450
 Wire Wire Line
@@ -1725,6 +1716,34 @@ Wire Wire Line
 	3150 2600 3100 2600
 Wire Wire Line
 	3100 2600 3100 2400
+Connection ~ 3100 2400
+Wire Wire Line
+	3100 2400 3800 2400
+$Comp
+L Device:Varistor MOV1
+U 1 1 5E46AE17
+P 2650 2250
+F 0 "MOV1" V 2360 2250 50  0000 C CNN
+F 1 "650V" V 2451 2250 50  0000 C CNN
+F 2 "Capacitor_THT:C_Disc_D9.0mm_W5.0mm_P5.00mm" H 2650 2300 50  0001 C CNN
+F 3 "~" H 2650 2300 50  0001 C CNN
+	1    2650 2250
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	2300 2250 2300 2400
+Wire Wire Line
+	2300 2250 2450 2250
+Connection ~ 2300 2250
+Wire Wire Line
+	2450 2050 2450 2250
+Connection ~ 2450 2250
+Wire Wire Line
+	2450 2250 2500 2250
+Wire Wire Line
+	2800 2250 2950 2250
+Wire Wire Line
+	2950 2250 2950 2400
 Wire Bus Line
 	8850 3300 8850 6300
 Wire Bus Line
@@ -1733,7 +1752,7 @@ Wire Bus Line
 	5000 5900 5000 7550
 Wire Bus Line
 	8000 1850 8000 3300
-Connection ~ 3100 2400
+Connection ~ 2950 2400
 Wire Wire Line
-	3100 2400 3800 2400
+	2950 2400 3000 2400
 $EndSCHEMATC
