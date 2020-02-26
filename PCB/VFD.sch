@@ -1395,7 +1395,7 @@ F 4 "1W" V 4200 1250 60  0001 C CNN "Power"
 	1    4200 1250
 	1    0    0    -1  
 $EndComp
-Text Label 2550 3300 0    50   ~ 0
+Text Label 2600 3550 0    50   ~ 0
 -IGBT
 $Comp
 L IXA12IF1200PB:IXA12IF1200PB Q1
@@ -1753,14 +1753,6 @@ Wire Wire Line
 	2850 2100 2850 2400
 Wire Wire Line
 	3350 2100 3350 2400
-Wire Bus Line
-	8850 3300 8850 6300
-Wire Bus Line
-	5000 5900 5000 7550
-Wire Bus Line
-	3000 5900 3000 6850
-Wire Bus Line
-	8000 1850 8000 3300
 $Comp
 L Connector_Generic:Conn_01x01 J10
 U 1 1 5E56BE00
@@ -1835,4 +1827,12 @@ $EndComp
 Connection ~ 4650 3550
 Wire Wire Line
 	4650 3550 5250 3550
+Wire Bus Line
+	8850 3300 8850 6300
+Wire Bus Line
+	5000 5900 5000 7550
+Wire Bus Line
+	3000 5900 3000 6850
+Wire Bus Line
+	8000 1850 8000 3300
 $EndSCHEMATC
