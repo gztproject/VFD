@@ -945,7 +945,7 @@ Wire Wire Line
 Wire Wire Line
 	5900 5050 5900 5100
 Wire Wire Line
-	7750 5500 10500 5500
+	7750 5500 8200 5500
 Wire Wire Line
 	5900 5850 6250 5850
 Connection ~ 650  2300
@@ -1189,7 +1189,7 @@ L_NTC
 Text Label 3900 1650 0    50   ~ 0
 +Gate
 Text Label 8250 1800 0    50   ~ 0
--Trig
+Trig-
 Wire Wire Line
 	1700 2400 2300 2400
 Text Label 3500 5050 0    50   ~ 0
@@ -1399,7 +1399,7 @@ F 3 "http://www.farnell.com/datasheets/2354779.pdf" H 5550 3350 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 Text Label 8350 1700 0    50   ~ 0
-+Trig
+Trig+
 Wire Wire Line
 	6000 3250 6200 3250
 Wire Wire Line
@@ -1597,7 +1597,7 @@ Connection ~ 4200 1800
 Wire Wire Line
 	4200 1800 4350 1800
 Wire Wire Line
-	4350 1800 5050 1800
+	4350 1800 4850 1800
 Connection ~ 4350 1800
 Wire Wire Line
 	4350 2100 4650 2100
@@ -1605,7 +1605,7 @@ Wire Wire Line
 	5250 2100 5250 1900
 Connection ~ 4350 2100
 Wire Wire Line
-	4350 3250 5050 3250
+	4350 3250 4850 3250
 Connection ~ 4350 3250
 Wire Wire Line
 	4350 3550 4650 3550
@@ -1624,18 +1624,18 @@ Wire Wire Line
 Wire Wire Line
 	8350 1750 9050 1750
 Wire Wire Line
-	6200 1700 8350 1700
+	6200 1700 7250 1700
 Wire Wire Line
 	8350 1700 8350 1750
 Connection ~ 6200 1700
 Wire Wire Line
-	6100 1800 8250 1800
+	6100 1800 7250 1800
 Wire Wire Line
 	8250 1800 8250 1850
 Wire Wire Line
 	4800 1600 4800 1650
 Wire Wire Line
-	3900 1650 4800 1650
+	3900 1650 4600 1650
 Connection ~ 4800 1650
 Wire Wire Line
 	4800 1650 4800 1700
@@ -1668,7 +1668,7 @@ Wire Wire Line
 Wire Wire Line
 	3600 2900 3600 2800
 Wire Wire Line
-	3900 3100 4800 3100
+	3900 3100 4600 3100
 Connection ~ 4800 3100
 Wire Wire Line
 	4800 3100 4800 3150
@@ -1714,7 +1714,7 @@ U 1 1 5ED389B3
 P 3100 2100
 F 0 "C10" H 3125 2200 50  0000 L CNN
 F 1 "8uf, 400VAC" V 3150 1600 50  0000 L CNN
-F 2 "Oddities:Dummy_Empty" H 3138 1950 50  0001 C CNN
+F 2 "Capacitors_THT:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal" H 3138 1950 50  0001 C CNN
 F 3 "" H 3100 2100 50  0001 C CNN
 	1    3100 2100
 	0    1    1    0   
@@ -1839,14 +1839,6 @@ Wire Wire Line
 Connection ~ 6000 1600
 Wire Wire Line
 	6000 1900 6400 1900
-Wire Bus Line
-	8850 3300 8850 6300
-Wire Bus Line
-	5000 5900 5000 7550
-Wire Bus Line
-	3000 5900 3000 6850
-Wire Bus Line
-	8000 1850 8000 3300
 Connection ~ 6000 1900
 $Comp
 L Device1:C C11
@@ -1903,4 +1895,158 @@ Wire Wire Line
 Connection ~ 7650 4550
 Wire Wire Line
 	7650 4550 8000 4550
+Wire Bus Line
+	8850 3300 8850 6300
+Wire Bus Line
+	5000 5900 5000 7550
+Wire Bus Line
+	3000 5900 3000 6850
+Wire Bus Line
+	8000 1850 8000 3300
+$Comp
+L Connector_Generic:Conn_01x01 TPG1
+U 1 1 5E71086E
+P 4600 1450
+F 0 "TPG1" V 4472 1530 50  0000 L CNN
+F 1 "Conn_01x01" V 4563 1530 50  0000 L CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 4600 1450 50  0001 C CNN
+F 3 "~" H 4600 1450 50  0001 C CNN
+	1    4600 1450
+	0    -1   -1   0   
+$EndComp
+Connection ~ 4600 1650
+Wire Wire Line
+	4600 1650 4800 1650
+$Comp
+L Connector_Generic:Conn_01x01 TPG2
+U 1 1 5E7152C1
+P 4600 2900
+F 0 "TPG2" V 4472 2980 50  0000 L CNN
+F 1 "Conn_01x01" V 4563 2980 50  0000 L CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 4600 2900 50  0001 C CNN
+F 3 "~" H 4600 2900 50  0001 C CNN
+	1    4600 2900
+	0    -1   -1   0   
+$EndComp
+Connection ~ 4600 3100
+Wire Wire Line
+	4600 3100 4800 3100
+$Comp
+L Connector_Generic:Conn_01x01 TP5V
+U 1 1 5E724D4B
+P 7700 3700
+F 0 "TP5V" H 7800 3700 50  0000 L CNN
+F 1 "Conn_01x01" V 7663 3780 50  0000 L CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 7700 3700 50  0001 C CNN
+F 3 "~" H 7700 3700 50  0001 C CNN
+	1    7700 3700
+	1    0    0    -1  
+$EndComp
+Connection ~ 7500 3700
+$Comp
+L Connector_Generic:Conn_01x01 TPGND
+U 1 1 5E72920B
+P 7700 3900
+F 0 "TPGND" H 7800 3900 50  0000 L CNN
+F 1 "Conn_01x01" V 7663 3980 50  0000 L CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 7700 3900 50  0001 C CNN
+F 3 "~" H 7700 3900 50  0001 C CNN
+	1    7700 3900
+	1    0    0    -1  
+$EndComp
+Connection ~ 7500 3900
+$Comp
+L Connector_Generic:Conn_01x01 TPRX
+U 1 1 5E72AB38
+P 8200 5300
+F 0 "TPRX" V 8200 5050 50  0000 L CNN
+F 1 "Conn_01x01" V 8163 5380 50  0000 L CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 8200 5300 50  0001 C CNN
+F 3 "~" H 8200 5300 50  0001 C CNN
+	1    8200 5300
+	0    -1   -1   0   
+$EndComp
+Connection ~ 8200 5500
+Wire Wire Line
+	8200 5500 10500 5500
+$Comp
+L Connector_Generic:Conn_01x01 TPDS2-
+U 1 1 5E73177D
+P 5450 3550
+F 0 "TPDS2-" H 5550 3550 50  0000 L CNN
+F 1 "Conn_01x01" V 5413 3630 50  0000 L CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 5450 3550 50  0001 C CNN
+F 3 "~" H 5450 3550 50  0001 C CNN
+	1    5450 3550
+	1    0    0    -1  
+$EndComp
+Connection ~ 5250 3550
+$Comp
+L Connector_Generic:Conn_01x01 TPDS2+
+U 1 1 5E73595D
+P 4850 3450
+F 0 "TPDS2+" V 5050 3300 50  0000 L CNN
+F 1 "Conn_01x01" V 4813 3530 50  0000 L CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 4850 3450 50  0001 C CNN
+F 3 "~" H 4850 3450 50  0001 C CNN
+	1    4850 3450
+	0    1    1    0   
+$EndComp
+Connection ~ 4850 3250
+Wire Wire Line
+	4850 3250 5050 3250
+$Comp
+L Connector_Generic:Conn_01x01 TPDS1+
+U 1 1 5E736101
+P 4850 2000
+F 0 "TPDS1+" V 5050 1850 50  0000 L CNN
+F 1 "Conn_01x01" V 4813 2080 50  0000 L CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 4850 2000 50  0001 C CNN
+F 3 "~" H 4850 2000 50  0001 C CNN
+	1    4850 2000
+	0    1    1    0   
+$EndComp
+Connection ~ 4850 1800
+Wire Wire Line
+	4850 1800 5050 1800
+$Comp
+L Connector_Generic:Conn_01x01 TPDS1-
+U 1 1 5E738BCC
+P 5450 2100
+F 0 "TPDS1-" H 5550 2100 50  0000 L CNN
+F 1 "Conn_01x01" V 5413 2180 50  0000 L CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 5450 2100 50  0001 C CNN
+F 3 "~" H 5450 2100 50  0001 C CNN
+	1    5450 2100
+	1    0    0    -1  
+$EndComp
+Connection ~ 5250 2100
+$Comp
+L Connector_Generic:Conn_01x01 TPq-
+U 1 1 5E73B1FA
+P 7250 2000
+F 0 "TPq-" V 7122 2080 50  0000 L CNN
+F 1 "Conn_01x01" V 7213 2080 50  0000 L CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 7250 2000 50  0001 C CNN
+F 3 "~" H 7250 2000 50  0001 C CNN
+	1    7250 2000
+	0    1    1    0   
+$EndComp
+Connection ~ 7250 1800
+Wire Wire Line
+	7250 1800 8250 1800
+$Comp
+L Connector_Generic:Conn_01x01 TPq+
+U 1 1 5E73C503
+P 7250 1500
+F 0 "TPq+" V 7122 1580 50  0000 L CNN
+F 1 "Conn_01x01" V 7213 1580 50  0000 L CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 7250 1500 50  0001 C CNN
+F 3 "~" H 7250 1500 50  0001 C CNN
+	1    7250 1500
+	0    -1   -1   0   
+$EndComp
+Connection ~ 7250 1700
+Wire Wire Line
+	7250 1700 8350 1700
 $EndSCHEMATC
