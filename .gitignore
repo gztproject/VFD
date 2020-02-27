@@ -34,3 +34,5 @@
 # Platformio
 .pio/
 .vscode/
+
+PCB/Documentation/

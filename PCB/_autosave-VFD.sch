@@ -1189,7 +1189,7 @@ L_NTC
 Text Label 3900 1650 0    50   ~ 0
 +Gate
 Text Label 8250 1800 0    50   ~ 0
--Trig
+Trig-
 Wire Wire Line
 	1700 2400 2300 2400
 Text Label 3500 5050 0    50   ~ 0
@@ -1399,7 +1399,7 @@ F 3 "http://www.farnell.com/datasheets/2354779.pdf" H 5550 3350 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 Text Label 8350 1700 0    50   ~ 0
-+Trig
+Trig+
 Wire Wire Line
 	6000 3250 6200 3250
 Wire Wire Line
@@ -1714,7 +1714,7 @@ U 1 1 5ED389B3
 P 3100 2100
 F 0 "C10" H 3125 2200 50  0000 L CNN
 F 1 "8uf, 400VAC" V 3150 1600 50  0000 L CNN
-F 2 "Oddities:Dummy_Empty" H 3138 1950 50  0001 C CNN
+F 2 "Capacitors_THT:CP_Axial_L10.0mm_D4.5mm_P15.00mm_Horizontal" H 3138 1950 50  0001 C CNN
 F 3 "" H 3100 2100 50  0001 C CNN
 	1    3100 2100
 	0    1    1    0   
