@@ -19,7 +19,7 @@
 #define BTN3PIN A2 //Button 3
 #define POTPIN A3  //Fader
 
-#define MAX_FADER_READING 84
+#define MAX_FADER_READING 100
 #define FADER_SMOOTHING 10 //Number of values for the running average; 0 to disable
 
 //Display pins:
