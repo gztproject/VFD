@@ -1,4 +1,4 @@
-(kicad_pcb (version 20171130) (host pcbnew 5.1.5-52549c5~84~ubuntu18.04.1)
+(kicad_pcb (version 20171130) (host pcbnew 5.1.5-52549c5~86~ubuntu18.04.1)
 
   (general
     (thickness 1.6)
@@ -2990,7 +2990,7 @@
     (fp_text reference R12 (at 7.62 -3.31 90) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 220k (at 7.62 3.31 90) (layer F.Fab)
+    (fp_text value 110k (at 7.62 3.31 90) (layer F.Fab)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start 16.7 -2.6) (end -1.45 -2.6) (layer F.CrtYd) (width 0.05))
@@ -3028,7 +3028,7 @@
     (fp_text reference R11 (at 15.24 -2.032 270) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (fp_text value 220k (at 7.62 3.31 90) (layer F.Fab)
+    (fp_text value 110k (at 7.62 3.31 90) (layer F.Fab)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_line (start 16.7 -2.6) (end -1.45 -2.6) (layer F.CrtYd) (width 0.05))
