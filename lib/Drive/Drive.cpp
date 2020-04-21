@@ -14,9 +14,9 @@ void Drive::init(uint8_t output1, uint8_t output2)
     out1 = output1;
     out2 = output2;
     pinMode(out1, OUTPUT);
-    pinMode(out2, OUTPUT);
-    digitalWrite(out1, ACTIVE_LOW);
-    digitalWrite(out2, ACTIVE_LOW);
+    digitalWrite(out1, ACTIVE_LOW?HIGH:LOW);
+    pinMode(out2, OUTPUT);    
+    digitalWrite(out2, ACTIVE_LOW?HIGH:LOW);
     frequency = MIN_DRIVE_FREQUENCY;
     width = DEFAULT_DRIVE_DUTY_CYCLE;
     populatePwmLookup();
@@ -61,13 +61,10 @@ void Drive::energize()
 }
 
 void Drive::turnOff()
-{
-    if (active)
-    {
-        active = false;
-        digitalWrite(out1, ACTIVE_LOW);
-        digitalWrite(out2, ACTIVE_LOW);
-    }
+{   
+    active = false;
+    digitalWrite(out1, ACTIVE_LOW?HIGH:LOW);
+    digitalWrite(out2, ACTIVE_LOW?HIGH:LOW);
 }
 
 void Drive::tick()
@@ -79,8 +76,8 @@ void Drive::tick()
         bool o1 = (cnt < width * 10) && pwm;
         bool o2 = cnt > (uint16_t)(PWM_FACTOR / 2) && cnt < (width * 10) + (uint16_t)(PWM_FACTOR / 2) && pwm;
 
-        digitalWrite(out1, !(o1 ^ !ACTIVE_LOW));
-        digitalWrite(out2, !(o2 ^ !ACTIVE_LOW));
+        digitalWrite(out1, !(o1 ^ !ACTIVE_LOW)?HIGH:LOW);
+        digitalWrite(out2, !(o2 ^ !ACTIVE_LOW)?HIGH:LOW);
         cnt = cnt >= PWM_FACTOR - 1 ? 0 : cnt + 1;
         pwmCnt = pwmCnt >= PWM_WINDOW - 1 ? 0 : pwmCnt + 1;
     }

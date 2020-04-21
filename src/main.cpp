@@ -38,6 +38,7 @@ void setup()
   UI::init();
   lastMillis = millis();
   Drive::init(TRIG_POS, TRIG_NEG);
+  Drive::turnOff();
 }
 
 void loop()
@@ -57,6 +58,7 @@ void loop()
     Drive::setWidth(EEPROMsettings::getSettings().driveDutyCycle);
     state = logo;
     lastMillis = millis();
+    Drive::turnOff();
     break;
   }
 
@@ -108,7 +110,7 @@ void loop()
 
     if (newAddress == -1)
       newAddress = DMX::getAddress();
-    
+
     if (UI::buttons & BTN2 && millis() - lastMillis > 100)
     {
       newAddress++;
@@ -124,7 +126,7 @@ void loop()
     newAddress = newAddress == 513 - NUM_CHANS ? 1 : newAddress == 0 ? 512 - NUM_CHANS : newAddress;
     newAddress = constrain(newAddress, 1, 512 - NUM_CHANS);
     UI::printDMX(newAddress);
-    
+
     if (millis() - lastMillis > MENU_TIMEOUT)
     {
       state = manual;
@@ -152,7 +154,7 @@ void loop()
       UI::printString("DTY");
       break;
     }
-    
+
     if (newDriveDutyCycle == -1)
       newDriveDutyCycle = Drive::getWidth();
 
@@ -174,7 +176,7 @@ void loop()
       state = manual;
       lastMillis = millis();
       break;
-    }   
+    }
 
     if (UI::buttons & BTN3)
     {
@@ -223,9 +225,11 @@ void loop()
   {
     state = error;
     UI::printString("Err");
+    Drive::turnOff();
     while (1)
     {
       UI::refresh();
+      Drive::turnOff();
     }
   }
   }
